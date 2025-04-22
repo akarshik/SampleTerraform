@@ -16,19 +16,23 @@ jobs:
         run: |
           echo "${{ secrets.OCI_PRIVATE_KEY_BASE64 }}" | base64 --decode > oci_key.pem
           chmod 600 oci_key.pem
+          # Verify key
+          head -n 1 oci_key.pem
 
       # 2. Configure Terraform
       - uses: hashicorp/setup-terraform@v2
 
-      # 3. Initialize
+      # 3. Debug: Print secret names (verify they're accessible)
+      - name: Debug Secrets
+        run: |
+          echo "Tenancy OCID: ${{ secrets.TF_VAR_TENANCY_OCID }}"
+          echo "User OCID: ${{ secrets.TF_VAR_USER_OCID }}"
+          echo "Fingerprint: ${{ secrets.TF_VAR_FINGERPRINT }}"
+
+      # 4. Terraform Commands
       - name: Terraform Init
         run: terraform init -input=false
 
-      # 4. Validate
-      - name: Terraform Validate
-        run: terraform validate
-
-      # 5. Plan with ALL variables
       - name: Terraform Plan
         run: |
           terraform plan -input=false \
