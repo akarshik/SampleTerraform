@@ -27,7 +27,6 @@ variable "region" {
 variable "compartment_id" {
   description = "OCID of the compartment where resources will be created"
   type        = string
-  default = "ocid1.compartment.oc1..aaaaaaaac7ixtdbw32dnr55p4mjsjdmtbfcy5pa5rasdvuw57eup5w7xbu3q"
 }
 
 variable "subnet_id" {
