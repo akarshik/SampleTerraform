@@ -1,12 +1,41 @@
-name: Terraform Validation
-on: [push]
+name: Terraform OCI Deployment
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      # 1. Set up OCI private key
+      - name: Setup OCI Authentication
+        run: |
+          echo "${{ secrets.OCI_PRIVATE_KEY_BASE64 }}" | base64 --decode > oci_key.pem
+          chmod 600 oci_key.pem
+
+      # 2. Configure Terraform
       - uses: hashicorp/setup-terraform@v2
-      - run: terraform init
-      - run: terraform validate
-      - run: terraform plan
+
+      # 3. Initialize
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      # 4. Validate
+      - name: Terraform Validate
+        run: terraform validate
+
+      # 5. Plan with ALL variables
+      - name: Terraform Plan
+        run: |
+          terraform plan -input=false \
+            -var="tenancy_ocid=${{ secrets.TF_VAR_TENANCY_OCID }}" \
+            -var="user_ocid=${{ secrets.TF_VAR_USER_OCID }}" \
+            -var="fingerprint=${{ secrets.TF_VAR_FINGERPRINT }}" \
+            -var="region=${{ secrets.TF_VAR_REGION }}" \
+            -var="compartment_id=${{ secrets.TF_VAR_COMPARTMENT_ID }}" \
+            -var="subnet_id=${{ secrets.TF_VAR_SUBNET_OCID }}" \
+            -var="private_key_path=./oci_key.pem"
