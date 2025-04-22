@@ -11,28 +11,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # 1. Set up OCI private key
-      - name: Setup OCI Authentication
+      # 1. Set up OCI authentication properly
+      - name: Setup OCI Configuration
         run: |
-          echo "${{ secrets.OCI_PRIVATE_KEY_BASE64 }}" | base64 --decode > oci_key.pem
-          chmod 600 oci_key.pem
-          # Verify key
-          head -n 1 oci_key.pem
+          # Create .oci directory (standard location)
+          mkdir -p ~/.oci
+          
+          # Decode private key
+          echo "${{ secrets.OCI_PRIVATE_KEY_BASE64 }}" | base64 --decode > ~/.oci/oci_api_key.pem
+          chmod 600 ~/.oci/oci_api_key.pem
+          
+          # Verify key exists
+          echo "Key contents start with:"
+          head -n 1 ~/.oci/oci_api_key.pem
+          
+          # Verify fingerprint matches
+          echo "Computed fingerprint:"
+          openssl rsa -in ~/.oci/oci_api_key.pem -pubout -outform DER | openssl md5 -c
 
       # 2. Configure Terraform
       - uses: hashicorp/setup-terraform@v2
 
-      # 3. Debug: Print secret names (verify they're accessible)
-      - name: Debug Secrets
-        run: |
-          echo "Tenancy OCID: ${{ secrets.TF_VAR_TENANCY_OCID }}"
-          echo "User OCID: ${{ secrets.TF_VAR_USER_OCID }}"
-          echo "Fingerprint: ${{ secrets.TF_VAR_FINGERPRINT }}"
-
-      # 4. Terraform Commands
+      # 3. Initialize Terraform
       - name: Terraform Init
         run: terraform init -input=false
 
+      # 4. Run Terraform Plan with all variables
       - name: Terraform Plan
         run: |
           terraform plan -input=false \
@@ -41,5 +45,8 @@ jobs:
             -var="fingerprint=${{ secrets.TF_VAR_FINGERPRINT }}" \
             -var="region=${{ secrets.TF_VAR_REGION }}" \
             -var="compartment_id=${{ secrets.TF_VAR_COMPARTMENT_ID }}" \
-            -var="subnet_id=${{ secrets.TF_VAR_SUBNET_OCID }}" \
-            -var="private_key_path=./oci_key.pem"
+            -var="subnet_id=${{ secrets.TF_VAR_SUBNET_OCID }}"
+        env:
+          # Standard OCI environment variables
+          OCI_CONFIG_FILE: ~/.oci/config
+          OCI_KEY_FILE: ~/.oci/oci_api_key.pem
