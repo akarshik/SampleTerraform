@@ -1,40 +1,36 @@
 variable "tenancy_ocid" {
   description = "OCID of your tenancy"
   type        = string
-  #default = "ocid1.tenancy.oc1..aaaaaaaao5tzcf56h4xmmlmgz4mzlt2fw366v2dcvbonemlkzp5ezessseha" # Replace with your actual tenancy OCID 
-
+  
 }
 
 variable "user_ocid" {
   description = "OCID of the user calling the API"
   type        = string
-  #default = "ocid1.user.oc1..aaaaaaaa7injenbwphtghs5zpscdbe6xa5zww2rjnkpp2zebozdwpmwah4iq" # Replace with your actual user OCID
+  
 }
 
 variable "fingerprint" {
   description = "Fingerprint for the key pair being used"
   type        = string
-  #default = "e6:5a:70:7c:3f:b1:ea:92:6f:08:ae:38:45:07:ea:19" # Replace with your actual fingerprint
+  
 }
 
 variable "private_key_path" {
   description = "Path to OCI API private key"
   type        = string
-  ##default = "/Users/akarshaik/.oci/akarsha.i@oracle.com_2023-11-27T11_12_03.749Z.pem"
-  
   default = "~/.oci/oci_api_key.pem"  # Standard OCI path
   
 }
 variable "image_id" {
   description = "OCI image OCID"
   type        = string
-  #default     = "ocid1.image.oc1.iad.aaaaaaaas27akp7nifckidk4kmlithh753vddgic6pum7diym632w3ie7yfa" # Oracle Linux 8
+  default     = "ocid1.image.oc1.iad.aaaaaaaas27akp7nifckidk4kmlithh753vddgic6pum7diym632w3ie7yfa" # Oracle Linux 8
 }
 
 variable "region" {
   description = "OCI region"
   type        = string
-  #default     = "us-ashburn-1"
 }
 
 variable "compartment_id" {
@@ -52,17 +48,17 @@ variable "subnet_id" {
 
 variable "compute_shape" {
   type    = string
-  #default = "VM.Standard.E4.Flex"
+  default = "VM.Standard.E4.Flex"
 }
 
 variable "compute_cpus" {
   type    = string
-  #default = "2"
+  default = "2"
 }
 
 variable "compute_memory_in_gbs" {
   type    = string
-  #default = "16"
+  default = "16"
 }
 
 variable "compute_ssh_authorized_keys" {
