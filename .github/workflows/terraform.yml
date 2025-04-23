@@ -13,7 +13,7 @@ jobs:
       - name: Setup OCI Authentication
         run: |
           mkdir -p ~/.oci
-          echo "${{ secrets.OCI_PRIVATE_KEY_BASE64 }}" | base64 --decode > ~/.oci/oci_api_key.pem
+          echo "${{ secrets.TF_VAR_PRIVATE_KEY }}" | base64 --decode > ~/.oci/oci_api_key.pem
           chmod 600 ~/.oci/oci_api_key.pem
           echo "Key fingerprint:"
           openssl rsa -in ~/.oci/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl md5 -c
