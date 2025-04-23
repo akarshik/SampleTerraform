@@ -64,7 +64,7 @@ variable "compute_memory_in_gbs" {
 variable "compute_ssh_authorized_keys" {
   description = "The SSH public key to be added to the instance for authentication"
   type        = string
-  #default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoMM5oNqtheYmN0oEdwe6Ql0B723MWJRavMCM9cBTcn0vTfKGBGIoRA0rK2XrFlIMJzb0TaFcCXF/3ejo8isiOdRfm1ANhLl6ovcG9ILrkWbogV1pISaUTcgjvqP1EFhfNiFIP0xejAsorivjft5t8RIjFRa+UHRTwJIio1wUtWsF37tkyi1Sdwq+eW+XvXkWWPEC6MZoIYnqgqSfHrXnqFViRSwploe5hTJYTmNg7Fo9Xa5qaqpTNhkPpwgl9qb8CJoKWHDH41ibdgZJgZfrAyfZpWmw/LwEPwUlDAHNVI0+zrbrT2Syai/o/anufqp+Nas7XMDAPlqLBazC7gudt ssh-key-2023-09-26"
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoMM5oNqtheYmN0oEdwe6Ql0B723MWJRavMCM9cBTcn0vTfKGBGIoRA0rK2XrFlIMJzb0TaFcCXF/3ejo8isiOdRfm1ANhLl6ovcG9ILrkWbogV1pISaUTcgjvqP1EFhfNiFIP0xejAsorivjft5t8RIjFRa+UHRTwJIio1wUtWsF37tkyi1Sdwq+eW+XvXkWWPEC6MZoIYnqgqSfHrXnqFViRSwploe5hTJYTmNg7Fo9Xa5qaqpTNhkPpwgl9qb8CJoKWHDH41ibdgZJgZfrAyfZpWmw/LwEPwUlDAHNVI0+zrbrT2Syai/o/anufqp+Nas7XMDAPlqLBazC7gudt ssh-key-2023-09-26"
 }
 # variable "compute_ssh_authorized_keys" {
 #   type = string
