@@ -2,8 +2,6 @@ name: Terraform OCI Deployment
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   validate:
@@ -11,32 +9,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # 1. Set up OCI authentication properly
-      - name: Setup OCI Configuration
+      # 1. OCI Key Setup
+      - name: Setup OCI Authentication
         run: |
-          # Create .oci directory (standard location)
           mkdir -p ~/.oci
-          
-          # Decode private key
           echo "${{ secrets.OCI_PRIVATE_KEY_BASE64 }}" | base64 --decode > ~/.oci/oci_api_key.pem
           chmod 600 ~/.oci/oci_api_key.pem
-          
-          # Verify key exists
-          echo "Key contents start with:"
-          head -n 1 ~/.oci/oci_api_key.pem
-          
-          # Verify fingerprint matches
-          echo "Computed fingerprint:"
-          openssl rsa -in ~/.oci/oci_api_key.pem -pubout -outform DER | openssl md5 -c
+          echo "Key fingerprint:"
+          openssl rsa -in ~/.oci/oci_api_key.pem -pubout -outform DER 2>/dev/null | openssl md5 -c
 
-      # 2. Configure Terraform
+      # 2. Terraform Setup
       - uses: hashicorp/setup-terraform@v2
 
-      # 3. Initialize Terraform
+      # 3. Terraform Commands
       - name: Terraform Init
         run: terraform init -input=false
 
-      # 4. Run Terraform Plan with all variables
       - name: Terraform Plan
         run: |
           terraform plan -input=false \
@@ -46,7 +34,3 @@ jobs:
             -var="region=${{ secrets.TF_VAR_REGION }}" \
             -var="compartment_id=${{ secrets.TF_VAR_COMPARTMENT_ID }}" \
             -var="subnet_id=${{ secrets.TF_VAR_SUBNET_OCID }}"
-        env:
-          # Standard OCI environment variables
-          OCI_CONFIG_FILE: ~/.oci/config
-          OCI_KEY_FILE: ~/.oci/oci_api_key.pem
