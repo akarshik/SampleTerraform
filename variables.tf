@@ -22,7 +22,7 @@ variable "private_key_path" {
   type        = string
   ##default = "/Users/akarshaik/.oci/akarsha.i@oracle.com_2023-11-27T11_12_03.749Z.pem"
   
-  ##default = "~/.oci/oci_api_key.pem"  # Standard OCI path
+  default = "~/.oci/oci_api_key.pem"  # Standard OCI path
   
 }
 variable "image_id" {
