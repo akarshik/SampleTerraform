@@ -14,8 +14,10 @@ variable "fingerprint" {
 }
 
 variable "private_key_path" {
-  description = "Path to the private key"
+  description = "Path to OCI API private key"
   type        = string
+  default = "~/.oci/oci_api_key.pem"  # Standard OCI path
+  
 }
 
 variable "region" {
